@@ -22,10 +22,11 @@ def train():
 
     X = vectorizer.fit_transform(df["text"])
     y = df["label"]
-
+    
+    # oversample (for suicidal class) - may be able to remove this at some point (with more data)
     ros = RandomOverSampler(random_state=16)
     X, y = ros.fit_resample(X, y)
-
+    
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=16)
 
     clf = LogisticRegression()
@@ -48,6 +49,7 @@ def classify(text, clf, vectorizer):
 
 def main():
     trained_clf, fitted_vectorizer = train()
+    # test some potential suicidal messages
     print(classify(["fuck my life", "just end it all", "kill me", "i wanna kill myself",
                     "that was the worst day of my life - i wanna die", "i'm suicidal"], trained_clf, fitted_vectorizer))
 
